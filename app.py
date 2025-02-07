@@ -28,20 +28,28 @@ def reinvest(savedprofit,previousPrice,sellprice,stk,currentprice,autoreinvest=T
             print("lack of ballance.try at next target again.you didn't use your saved profit\n")
             return savedprofit
 
+        
+
+# sundae 37198 MIN 11082 DOG 45938   Bar 25  Alice 85
+
 
 stocks_targets={
 
-                    'Alice':{ 'targets':[(4.20,10),(8,10),(14,50),(20,30),(30.696,50),(40,50),(65,80),(70,100)],'Savedprofits':[],},
-                    'ADA':{'targets':[(2.30,20),(3.5,0),(4.60,60),(6,80),(9,90)],'Savedprofits':[]}
+                
+                    'SUNDAE':{'targets':[(0.24,70),(0.48,80),(3,100)],'Savedprofits':[]},
+                    'MIN':{'targets':[(0.5,50),(1,80),(3,100)],'Savedprofits':[]},
+                    'DOG':{'targets':[(0.1,50),(0.2,80),(0.4,90),(0.7,100)],'Savedprofits':[]},
+                    'BAR':{'targets':[(30.20,70),(70,100)],'Savedprofits':[]},
+                    'Alice':{'targets':[(20,70),(40,70),(58,100)],'Savedprofits':[]},
+                    
                  }
-                 #(target,take profit percentage as reach this target)
                  
 reinvestments=[]#['token','entry price',sell price,reinvested money$']
-
-reinvestmentactive=False  #the way you reinvest             
+investmentpercentage=False #for exampe 10% savedprofit supposed to be invested
+reinvestmentactive=False
 totallbalance=0                 
 totallsaved=0
-autoreinvest=True #if false=>reinvest manualy
+autoreinvest=False #if false=>reinvest manualy
 for stk in stocks_targets:
                 stk_quantity=int(input(f"How many {stk} do you have: "))
                 print(f"Stock:{stk}")
@@ -66,7 +74,7 @@ for stk in stocks_targets:
                     if reinvestmentactive:
                         savedprofit=reinvest(savedprofit,previousPrice,stocks_targets[stk]['targets'][i][0],stk,currentprice,autoreinvest)
                         #balance+=savedprofit
-                    print(f"savedprofit after reinvesting:{savedprofit}")
+                        print(f"savedprofit after reinvesting:{savedprofit}")
                     stocks_targets[stk]['Savedprofits'].append(savedprofit)
                     totallsaved+=savedprofit
                     print(f"TP{i+1}:{stocks_targets[stk]['targets'][i][0]} ---- Balance:{balance}--------Save Percentage:{savepercentage}------ Saved profit:{savedprofit}")
@@ -77,6 +85,7 @@ for stk in stocks_targets:
                 
 print(f"reinvestments:{reinvestments}")
 reinvestmentsmade=sum([item[4] for item in reinvestments])
+print(f"Totall Balance:{totallbalance}")
 print(f"reinvestment made money:{reinvestmentsmade}$")
 totallbalance+=sum([item[4] for item in reinvestments])
 print(f"totalsaved:{totallsaved}")
@@ -86,8 +95,3 @@ print(f"Totall Balance(Balance+reinvestment made money+totall saved profit:{tota
                 
                 
                             
-                    
-                    
-                    
-#باید یه ابشنی اضافه کنم که مثلا هنگامی که میخوام اتوماتیک سیو سود کنه چند درصد بایین تر از قیمتی که فروخته بخره.
-#اضافه کردن کم کردن میزان اسلب تولریج در هربار سواب بخار سیو سود
