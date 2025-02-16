@@ -34,7 +34,9 @@ def reinvest(savedprofit,previousPrice,sellprice,stk,currentprice,reinvestments,
 
 
 stocks_targets={
-
+"""
+Best Senario
+"""
                 
                     'SUNDAE':{'targets':[(0.24,70),(0.48,80),(3,100)],'Savedprofits':[]},
                     'MIN':{'targets':[(0.5,70),(1,80),(3,100)],'Savedprofits':[]},
@@ -47,7 +49,22 @@ stocks_targets={
 
 
 
+stocks_targets1={
+"""
+Worst Senario
+Result=>tbalance=6859.858$
+        tbalance if renvestment active=11060.573072463769$$
 
+"""
+                
+                    'SUNDAE':{'targets':[(0.042,50),(0.1,100)],'Savedprofits':[]},
+                    'MIN':{'targets':[(0.16,50),(0.28,100)],'Savedprofits':[]},
+                    'DOG':{'targets':[(0.02,100),(0.03,100)],'Savedprofits':[]},
+                    'BAR':{'targets':[(9.20,70),(13,100)],'Savedprofits':[]},
+                    'Alice':{'targets':[(5,70),(12,100)],'Savedprofits':[]},
+                    
+                 }
+                 
 
 def profitcalculator(stocks_targets):
     reinvestments=[]#['token','entry price',sell price,reinvested money$']
@@ -99,6 +116,7 @@ def profitcalculator(stocks_targets):
 
 
 def main():
+    # sundae 37198 MIN 11082 DOG 45938   Bar 25  Alice 85
     reinvestments,totalbalance,totalsaved=profitcalculator(stocks_targets1)
     print(f"reinvestments:{reinvestments}")
     reinvestmentsmade=sum([item[4] for item in reinvestments])
