@@ -1,3 +1,45 @@
+from pycoingecko import CoinGeckoAPI
+
+class Portfolio(object):
+    
+    def __init__(self,myassets):
+        self.myassets=myassets
+        cg = CoinGeckoAPI()
+        assetslist=",".join([asset for asset in self.myassets])
+        self.assetsdata=cg.get_price(ids=assetslist, vs_currencies='usd')
+        
+    
+    def mydashboard(self):
+        mydashboard=[]
+        for asset in self.assetsdata:
+            coin=asset
+            price=self.assetsdata[asset]['usd']
+            quantity=self.myassets[asset]['Q']
+            mydashboard.append((asset,price*quantity))
+        return mydashboard
+        
+    def totalvalue(self):
+        tvalue=sum(item[1] for item in self.mydashboard())
+        return tvalue
+        
+        
+    def targetdistance(self):
+        """
+            calculate curent price distance from next taking profit targets by percentage
+        """
+        for asset in self.assetsdata:
+            for profitTargt in self.myassets[asset]['targets']:
+                print(f"asset:{asset} , target:{profitTargt[0]} , current price:{self.assetsdata[asset]['usd']} ")
+                if self.assetsdata[asset]['usd']>=profitTargt[0]:#proftTargt[1]=taking profit percentage in stocks_targets,myassets=stocks_targets
+                    pass
+                else:
+                    pass
+            
+                
+        
+        
+
+
 def reinvest(savedprofit,previousPrice,sellprice,stk,currentprice,reinvestments,autoreinvest=True):#currentPrice=previous price
         for i in range(len(list(stocks_targets))):
             print(f"{i} {list(stocks_targets)[i]}")
@@ -28,26 +70,18 @@ def reinvest(savedprofit,previousPrice,sellprice,stk,currentprice,reinvestments,
             print("lack of ballance.try at next target again.you didn't use your saved profit\n")
             return savedprofit,reinvestments
 
-        
-
-
 
 
 stocks_targets={
 
                 
-                    'SUNDAE':{'targets':[(0.24,70),(0.48,80),(3,100)],'Savedprofits':[]},
-                    'MIN':{'targets':[(0.5,70),(1,80),(3,100)],'Savedprofits':[]},
-                    'DOG':{'targets':[(0.1,70),(0.2,80),(0.4,90),(0.7,100)],'Savedprofits':[]},
-                    'BAR':{'targets':[(30.20,70),(70,100)],'Savedprofits':[]},
-                    'Alice':{'targets':[(20,70),(40,70),(58,100)],'Savedprofits':[]},
+                    'sundaeswap':{'targets':[(0.03,70),(0.06,40),(0.1,60),(0.15,70),(0.24,80),(0.48,90),(3,100)],'Savedprofits':[],'Q':31198},
+                    'minswap':{'targets':[(0.1,70),(0.3,50),(0.5,70),(1,80),(3,100)],'Savedprofits':[],'Q':13120},
+                    'dog-go-to-the-moon-rune':{'targets':[(0.01,70),(0.02,30),(0.3,50),(0.1,70),(0.2,80),(0.4,90),(0.7,100)],'Savedprofits':[],'Q':42064},
+                    'indigo-dao-governance-tok':{'targets':[(6.5,70),(30,70),(50,100)],'Savedprofits':[],'Q':38},
+                    'ski-mask-dog':{'targets':[(0.3,70),(0.52,50),(0.82,70),(1.13,80),(1.43,100)],'Savedprofits':[],'Q':702},
                     
                  }
-                 
-
-
-
-
 
 def profitcalculator(stocks_targets):
     reinvestments=[]#['token','entry price',sell price,reinvested money$']
@@ -59,13 +93,11 @@ def profitcalculator(stocks_targets):
     balance=0
     print(stocks_targets)
     for stk in stocks_targets:
-                    stk_quantity=int(input(f"How many {stk} do you have: "))
+                    stk_quantity=stocks_targets[stk]['Q']
                     print(f"Stock:{stk}")
                     for i in range(0,len(stocks_targets[stk]['targets'])):
-                        print(f"i={i}")
                         savepercentage=stocks_targets[stk]['targets'][i][1]
                         if i==0:
-                            print("zone Zero")
                             balance=stk_quantity*stocks_targets[stk]['targets'][i][0]
                             savedprofit=balance*savepercentage/100
                             totalsaved+=savedprofit
@@ -76,7 +108,6 @@ def profitcalculator(stocks_targets):
                             print(f"total saved profit:{totalsaved}")
                             print("--------------------------------------------------------------------------------------------")
                         else:
-                            print("zone One")
                             previousPrice=stocks_targets[stk]['targets'][i-1][0]
                             balance=(balance/previousPrice)*(stocks_targets[stk]['targets'][i][0])
                             savedprofit=balance*savepercentage/100
@@ -94,23 +125,4 @@ def profitcalculator(stocks_targets):
                         print("----------------------------------------------------------------------------------------------------------------------------")
                     totalbalance+=balance
     return [reinvestments,totalbalance,totalsaved]
-    
 
-
-
-def main():
-    reinvestments,totalbalance,totalsaved=profitcalculator(stocks_targets1)
-    print(f"reinvestments:{reinvestments}")
-    reinvestmentsmade=sum([item[4] for item in reinvestments])
-    print(f"total Balance:{totalbalance}")
-    print(f"reinvestment made money:{reinvestmentsmade}$")
-    totalbalance+=sum([item[4] for item in reinvestments])
-    print(f"totalsaved:{totalsaved}")
-    print(f"total Balance(Balance+reinvestment made money+total saved profit:{totalbalance+totalsaved}$")
-    
-main()
-                    
-                    
-                
-                
-                            
